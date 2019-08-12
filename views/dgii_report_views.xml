@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="dgii_report_form_view" model="ir.ui.view">
+        <field name="name">dgii.reports.form.view</field>
+        <field name="model">dgii.reports</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="generate_report" string="Generate Statements" type="object"
+                            class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="generate_report" string="Generate Statements" type="object"
+                            attrs="{'invisible': [('state', '!=', 'generated')]}"/>
+                    <button name="state_sent" string="Set as sent" type="object"
+                            class="oe_highlight" attrs="{'invisible': [('state', '!=', 'generated')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,sent"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="company_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page name="statements" string="Statements">
+                            <group>
+                                <group>
+                                    <field name="name" placeholder="MM/YYYY"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="previous_balance" readonly="1"/>
+                                </group>
+                            </group>
+                            <div class="col-xs-3">
+                                <div>
+                                    <button string="606" type="object" name="get_606_tree_view"
+                                            class="btn-primary"/>
+                                </div>
+                                <group name="606">
+                                    <field name="purchase_binary" filename="purchase_filename" readonly="1"/>
+                                    <field name="purchase_records" readonly="1"/>
+                                    <field name="purchase_invoiced_amount" readonly="1"/>
+                                    <field name="service_total_amount" readonly="1"/>
+                                    <field name="good_total_amount" readonly="1"/>
+                                    <separator colspan="2"/>
+                                    <field name="purchase_invoiced_itbis" readonly="1"/>
+                                    <field name="purchase_withholded_itbis" readonly="1"/>
+                                    <field name="cost_itbis" readonly="1"/>
+                                    <field name="advance_itbis" readonly="1"/>
+                                    <separator colspan="2"/>
+                                    <field name="income_withholding" readonly="1"/>
+                                    <separator colspan="2"/>
+                                    <field name="purchase_selective_tax" readonly="1"/>
+                                    <field name="purchase_other_taxes" readonly="1"/>
+                                    <field name="purchase_legal_tip" readonly="1"/>
+                                </group>
+                            </div>
+                            <div class="col-xs-3">
+                                <div>
+                                    <button string="607" type="object" name="get_607_tree_view"
+                                            class="btn-primary"/>
+                                </div>
+                                <group name="607">
+                                    <field name="sale_binary" filename="sale_filename" readonly="1"/>
+                                    <field name="sale_records" readonly="1"/>
+                                    <field name="sale_invoiced_amount" readonly="1"/>
+                                    <separator colspan="2"/>
+                                    <field name="sale_invoiced_itbis" readonly="1"/>
+                                    <field name="sale_withholded_itbis" readonly="1"/>
+                                    <separator colspan="2"/>
+                                    <field name="sale_withholded_isr" readonly="1"/>
+                                    <separator colspan="2"/>
+                                    <field name="sale_selective_tax" readonly="1"/>
+                                    <field name="sale_other_taxes" readonly="1"/>
+                                    <field name="sale_legal_tip" readonly="1"/>
+                                </group>
+                            </div>
+                            <div class="col-xs-3">
+                                <div>
+                                    <button string="608" type="object" name="get_608_tree_view"
+                                            class="btn-primary"/>
+                                </div>
+                                <group name="608">
+                                    <field name="cancel_binary" filename="cancel_filename" readonly="1"/>
+                                    <field name="cancel_records" readonly="1"/>
+                                </group>
+                            </div>
+                            <div class="col-xs-3">
+                                <div>
+                                    <button string="609" type="object" name="get_609_tree_view"
+                                            class="btn-primary"/>
+                                </div>
+                                <group name="609">
+                                    <field name="exterior_binary" filename="exterior_filename" readonly="1"/>
+                                    <field name="exterior_records" readonly="1"/>
+                                    <field name="exterior_invoiced_amount" readonly="1"/>
+                                    <separator colspan="2"/>
+                                    <field name="presumed_income" readonly="1"/>
+                                    <field name="exterior_withholded_isr" readonly="1"/>
+                                </group>
+                            </div>
+                        </page>
+                        <page name="it1" string="IT-1">
+                            <group string="607 Reported Operations by NCF Type">
+                                <field name="ncf_sale_summary_ids" nolabel="1" widget="one2many_list" readonly="1">
+                                    <tree>
+                                        <field name="sequence" invisible="1"/>
+                                        <field name="name"/>
+                                        <field name="qty"/>
+                                        <field name="amount" sum="Operations Total"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="dgii_report_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <div class="col-xs-6">
+                                <group string="Operations by Sale Type">
+                                    <field name="cash" readonly="1"/>
+                                    <field name="bank" readonly="1"/>
+                                    <field name="card" readonly="1"/>
+                                    <field name="credit" readonly="1"/>
+                                    <field name="bond" readonly="1"/>
+                                    <field name="swap" readonly="1"/>
+                                    <field name="others" readonly="1"/>
+                                    <field name="sale_type_total" readonly="1"/>
+                                </group>
+                            </div>
+                            <div class="col-xs-6">
+                                <group string="Operations by Income Type">
+                                    <field name="opr_income" readonly="1"/>
+                                    <field name="fin_income" readonly="1"/>
+                                    <field name="ext_income" readonly="1"/>
+                                    <field name="lea_income" readonly="1"/>
+                                    <field name="ast_income" readonly="1"/>
+                                    <field name="otr_income" readonly="1"/>
+                                    <field name="income_type_total" readonly="1"/>
+                                </group>
+                            </div>
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="dgii_report_tree_view" model="ir.ui.view">
+        <field name="name">dgii.reports.tree.view</field>
+        <field name="model">dgii.reports</field>
+        <field name="arch" type="xml">
+            <tree string="Statements">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="create_date"/>
+                <field name="create_uid"/>
+                <field name="write_date"/>
+                <field name="write_uid"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="dgii_report_search_view" model="ir.ui.view">
+        <field name="name">dgii.reports.search.view</field>
+        <field name="model">dgii.reports</field>
+        <field name="arch" type="xml">
+            <search string="Statements">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="dgii_report_action" model="ir.actions.act_window">
+        <field name="name">Reports</field>
+        <field name="res_model">dgii.reports</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="dgii_report_search_view"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create"></p>
+            <p>You can create your DGII Tax Statements here.</p>
+        </field>
+    </record>
+
+    <menuitem id="marcos_account_dgii_menu" name="DGII"
+              parent="account.menu_finance"
+              sequence="5"
+              groups="account.group_account_user"/>
+
+    <menuitem id="dgii_report_parent_menu" name="Data Sending"
+              parent="marcos_account_dgii_menu"
+              sequence="5"/>
+
+    <menuitem action="dgii_report_action" id="dgii_report_menu"
+              parent="dgii_report_parent_menu"
+              sequence="14"/>
+
+    <!--606-->
+    <record id="dgii_report_purchase_line_tree" model="ir.ui.view">
+        <field name="name">dgii.reports.purchase.line.tree</field>
+        <field name="model">dgii.reports.purchase.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="dgii_report_id" invisible="1"/>
+                <field name="line"/>
+                <field name="rnc_cedula"/>
+                <field name="invoice_partner_id"/>
+                <field name="identification_type"/>
+                <field name="purchase_fiscal_type"/>
+                <field name="fiscal_invoice_number"/>
+                <field name="modified_invoice_number"/>
+                <field name="invoice_date"/>
+                <field name="payment_date"/>
+                <field name="service_total_amount" sum="Total"/>
+                <field name="good_total_amount" sum="Total"/>
+                <field name="invoiced_amount" sum="Total"/>
+                <field name="invoiced_itbis" sum="Total"/>
+                <field name="withholded_itbis" sum="Total"/>
+                <field name="proportionality_tax" sum="Total"/>
+                <field name="cost_itbis" sum="Total"/>
+                <field name="advance_itbis" sum="Total"/>
+                <field name="purchase_perceived_itbis" sum="Total"/>
+                <field name="isr_withholding_type" sum="Total"/>
+                <field name="income_withholding" sum="Total"/>
+                <field name="purchase_perceived_isr" sum="Total"/>
+                <field name="selective_tax" sum="Total"/>
+                <field name="other_taxes" sum="Total"/>
+                <field name="legal_tip" sum="Total"/>
+                <field name="payment_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--607-->
+    <record id="dgii_report_sale_line_tree" model="ir.ui.view">
+        <field name="name">dgii.reports.sale.line.tree</field>
+        <field name="model">dgii.reports.sale.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="dgii_report_id" invisible="1"/>
+                <field name="line"/>
+                <field name="rnc_cedula"/>
+                <field name="invoice_partner_id"/>
+                <field name="identification_type"/>
+                <field name="fiscal_invoice_number"/>
+                <field name="modified_invoice_number"/>
+                <field name="income_type"/>
+                <field name="invoice_date"/>
+                <field name="withholding_date"/>
+                <field name="invoiced_amount" sum="Total"/>
+                <field name="invoiced_itbis" sum="Total"/>
+                <field name="third_withheld_itbis" sum="Total"/>
+                <field name="perceived_itbis" sum="Total"/>
+                <field name="third_income_withholding" sum="Total"/>
+                <field name="perceived_isr" sum="Total"/>
+                <field name="selective_tax" sum="Total"/>
+                <field name="other_taxes" sum="Total"/>
+                <field name="legal_tip" sum="Total"/>
+                <field name="cash" sum="Total"/>
+                <field name="bank" sum="Total"/>
+                <field name="card" sum="Total"/>
+                <field name="credit" sum="Total"/>
+                <field name="bond" sum="Total"/>
+                <field name="swap" sum="Total"/>
+                <field name="others" sum="Total"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--608-->
+    <record id="dgii_cancel_report_line_tree" model="ir.ui.view">
+        <field name="name">dgii.reports.cancel.line.tree</field>
+        <field name="model">dgii.reports.cancel.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="dgii_report_id" invisible="1"/>
+                <field name="line"/>
+                <field name="invoice_partner_id"/>
+                <field name="fiscal_invoice_number"/>
+                <field name="invoice_date"/>
+                <field name="anulation_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--609-->
+    <record id="dgii_exterior_report_line_tree" model="ir.ui.view">
+        <field name="name">dgii.exterior.cancel.line.tree</field>
+        <field name="model">dgii.reports.exterior.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="dgii_report_id" invisible="1"/>
+                <field name="line"/>
+                <field name="legal_name"/>
+                <field name="tax_id_type"/>
+                <field name="tax_id"/>
+                <field name="country_code"/>
+                <field name="purchased_service_type"/>
+                <field name="service_type_detail"/>
+                <field name="related_part"/>
+                <field name="doc_number"/>
+                <field name="doc_date"/>
+                <field name="invoiced_amount" sum="Total"/>
+                <field name="isr_withholding_date" sum="Total"/>
+                <field name="presumed_income" sum="Total"/>
+                <field name="withholded_isr" sum="Total"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>
